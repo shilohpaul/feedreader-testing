@@ -56,18 +56,16 @@ $(function() {
       before the spec is run
        */
        beforeEach(function(done){
-         loadFeed(0, function(){
-           done();
-         });
+         loadFeed(0, done);
        });
        /* First grabs the element with the feed class from the document using
-       query selector and stores it in feedCheck, then grabs the element with
-       the entry class from feedCheck and tests that it is defined
+       query selector and stores it in feedCheck, then grabs all the elements with
+       the entry class from feedCheck and tests that there are more than 0
         */
-       it('At least one entry', function(){
+       it('at least one entry', function(){
          let feedCheck = document.querySelector('.feed');
-         let entryCheck = feedCheck.querySelector('.entry');
-         expect(entryCheck).toBeDefined();
+         let entriesCheck = feedCheck.querySelectorAll('.entry');
+         expect(entriesCheck.length).toBeGreaterThan(0);
        });
     });
 
@@ -78,18 +76,15 @@ $(function() {
        beforeEach(function(done){
          loadFeed(0, function(){
            feedOne = document.querySelector('.feed').innerHTML;
-           done();
+           loadFeed(1, function() {
+             feedTwo = document.querySelector('.feed').innerHTML;
+             done();
+           });
          });
-         loadFeed(1, function() {
-           feedTwo = document.querySelector('.feed').innerHTML;
-           done();
-         })
        });
        /*Checks to make sure that feedOne does not equal feedTwo*/
-       it('Content changes', function(){
+       it('content changes', function(){
          expect(feedOne).not.toEqual(feedTwo);
-       })
-
+       });
     });
-
 }());
